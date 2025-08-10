@@ -13,6 +13,7 @@ class StoreNotFoundException extends Exception {
         private String goodsName;
         private String storeName;
         private double cost;
+        Scanner sc = new Scanner(System.in);
 
         public Price() {
         }
@@ -49,7 +50,6 @@ class StoreNotFoundException extends Exception {
 
         public void displayInfo() {
             for (int i = 0; i < prices.length; i++) {
-                Scanner sc = new Scanner(System.in);
                 System.out.println("Введіть назву товару: ");
                 String goods = sc.nextLine();
                 System.out.println("Введіть назву магазину: ");
@@ -67,22 +67,28 @@ class StoreNotFoundException extends Exception {
         }
 
         public void searchGoods() {
-            System.out.println("Введіть назву магазину для пошуку товарів із попереднього списку:");
-            Scanner sc = new Scanner(System.in);
-            String searchGoods = sc.nextLine();
-            try {
-                boolean found = false;
-                for (Price temp : prices) {
-                    if (temp.getStoreName().equalsIgnoreCase(searchGoods)) {
-                        System.out.println(temp);
-                        found = true;
+            System.out.println();
+            while (true) {
+                System.out.println("Введіть назву магазину для пошуку товарів із попереднього списку:");
+                String searchGoods = sc.nextLine();
+                if (searchGoods.equalsIgnoreCase("exit")) {
+                    System.out.println("Вихід з пошуку.");
+                    break;
+                }
+                try {
+                    boolean found = false;
+                    for (Price temp : prices) {
+                        if (temp.getStoreName().equalsIgnoreCase(searchGoods)) {
+                            System.out.println(temp);
+                            found = true;
+                        }
                     }
+                    if (!found) {
+                        throw new StoreNotFoundException("Магазин " + searchGoods + " не знайдено!");
+                    }
+                } catch (StoreNotFoundException e) {
+                    System.out.println("Вийняток " + e.getMessage());
                 }
-                if (!found) {
-                    throw new StoreNotFoundException("Магазин " + searchGoods + " не знайдено!");
-                }
-            } catch (StoreNotFoundException e) {
-                System.out.println("Вийняток " + e.getMessage());
             }
         }
     }
